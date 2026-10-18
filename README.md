@@ -154,6 +154,12 @@ python seed.py
 
 python app.py
 
+## 👤 Autor
+
+**MAJID**
+- GitHub: [@nabilhaj5](https://github.com/nabilhaj5)
+- Email: nabilhaj5@gmail.com
+
 
 
 
