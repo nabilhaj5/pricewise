@@ -1,25 +1,16 @@
 # Python
+venv/
 __pycache__/
 *.pyc
-*.pyo
-venv/
-.venv/
-env/
 *.db
-*.sqlite3
 
-# Node / React
+# Node
 node_modules/
 dist/
-build/
 
 # Entorno
 .env
 .env.local
-.env.*.local
-
-# VS Code
-.vscode/
 
 # Sistema
 .DS_Store
