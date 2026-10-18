@@ -14,7 +14,7 @@ Los precios de los mismos productos varían entre supermercados, y calcular a ma
 
 
 
-\## 👤 majid 
+\## 👤 Usuario final 
 
 
 
