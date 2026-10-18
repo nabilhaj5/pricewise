@@ -24,5 +24,7 @@ def create_app():
 
 
 if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 5001))
     app = create_app()
-    app.run(port=5001, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=False)
