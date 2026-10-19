@@ -8,11 +8,16 @@ import os
 def create_app():
     app = Flask(__name__)
 
-    # Leer DATABASE_URL del entorno (Neon en producción) o usar SQLite en local
+    # 1. Leer DATABASE_URL del entorno (Neon) o usar SQLite en local
     database_url = os.environ.get('DATABASE_URL', 'sqlite:///products.db')
-    # Neon/Render a veces dan la URL como postgres://, SQLAlchemy necesita postgresql://
+
+    # 2. Normalizar postgres:// -> postgresql:// (algunos proveedores lo dan así)
     if database_url.startswith('postgres://'):
         database_url = database_url.replace('postgres://', 'postgresql://', 1)
+
+    # 3. FORZAR el driver psycopg2 para SQLAlchemy 2.1+
+    if database_url.startswith('postgresql://'):
+        database_url = database_url.replace('postgresql://', 'postgresql+psycopg2://', 1)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
