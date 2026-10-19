@@ -1,4 +1,4 @@
-function ProductList({ products, onAdd, loading }) {
+function ProductList({ products, onAdd, loadingProductId }) {
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       <h2 className="text-xl font-semibold text-gray-800 mb-4">
@@ -24,10 +24,10 @@ function ProductList({ products, onAdd, loading }) {
               </div>
               <button
                 onClick={() => onAdd(product.id)}
-                disabled={loading}
+                disabled={loadingProductId === product.id}
                 className="bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 text-white text-sm font-medium px-3 py-1 rounded transition"
               >
-                Añadir
+                {loadingProductId === product.id ? 'Añadiendo...' : 'Añadir'}
               </button>
             </li>
           ))}

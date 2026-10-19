@@ -15,16 +15,15 @@ function App() {
   const [list, setList] = useState(null);
   const [comparison, setComparison] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingProductId, setLoadingProductId] = useState(null);
   const [error, setError] = useState(null);
 
-  // Cargar productos al inicio
   useEffect(() => {
     getProducts()
       .then(setProducts)
       .catch(() => setError('No se pudo cargar el catálogo de productos'));
   }, []);
 
-  // Crear lista si no existe
   const ensureList = async () => {
     if (list) return list;
     const newList = await createList('Mi compra');
@@ -32,31 +31,28 @@ function App() {
     return newList;
   };
 
-  // Añadir producto a la lista
+  const getListById = async (id) => {
+    const base = import.meta.env.VITE_LISTS_API || 'http://localhost:5002';
+    const res = await fetch(`${base}/lists/${id}`);
+    return res.json();
+  };
+
   const handleAddProduct = async (productId) => {
     try {
-      setLoading(true);
+      setLoadingProductId(productId);
       setError(null);
       const currentList = await ensureList();
       await addItemToList(currentList.id, productId);
       const updated = await getListById(currentList.id);
       setList(updated);
-      setComparison(null); // invalidar comparación previa
+      setComparison(null);
     } catch (err) {
       setError('Error al añadir producto. ¿Están los dos backends corriendo?');
     } finally {
-      setLoading(false);
+      setLoadingProductId(null);
     }
   };
 
-  // Pequeño helper para recargar la lista
-const getListById = async (id) => {
-  const base = import.meta.env.VITE_LISTS_API || 'http://localhost:5002';
-  const res = await fetch(`${base}/lists/${id}`);
-  return res.json();
-};
-
-  // Comparar precios
   const handleCompare = async () => {
     if (!list) return;
     try {
@@ -70,7 +66,7 @@ const getListById = async (id) => {
       setLoading(false);
     }
   };
-  // Reset: borra la lista y vuelve al estado inicial
+
   const handleReset = async () => {
     try {
       setLoading(true);
@@ -78,7 +74,6 @@ const getListById = async (id) => {
         await deleteList(list.id);
       }
     } catch (err) {
-      // Si falla el borrado, seguimos igualmente limpiando el estado
       console.warn('No se pudo borrar la lista del backend:', err);
     } finally {
       setList(null);
@@ -90,7 +85,8 @@ const getListById = async (id) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-           <header className="bg-emerald-600 text-white shadow-lg">
+      {/* Header */}
+      <header className="bg-emerald-600 text-white shadow-lg">
         <div className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">🛒 PriceWise</h1>
@@ -120,7 +116,7 @@ const getListById = async (id) => {
         <ProductList
           products={products}
           onAdd={handleAddProduct}
-          loading={loading}
+          loadingProductId={loadingProductId}
         />
         <ShoppingList
           list={list}
