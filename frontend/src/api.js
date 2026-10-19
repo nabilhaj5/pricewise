@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const PRODUCTS_API = 'http://localhost:5001';
-const LISTS_API = 'http://localhost:5002';
+const PRODUCTS_API = import.meta.env.VITE_PRODUCTS_API || 'http://localhost:5001';
+const LISTS_API = import.meta.env.VITE_LISTS_API || 'http://localhost:5002';
 
 // ---------- PRODUCTOS ----------
 

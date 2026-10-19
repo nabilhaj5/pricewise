@@ -50,10 +50,11 @@ function App() {
   };
 
   // Pequeño helper para recargar la lista
-  const getListById = async (id) => {
-    const res = await fetch(`http://localhost:5002/lists/${id}`);
-    return res.json();
-  };
+const getListById = async (id) => {
+  const base = import.meta.env.VITE_LISTS_API || 'http://localhost:5002';
+  const res = await fetch(`${base}/lists/${id}`);
+  return res.json();
+};
 
   // Comparar precios
   const handleCompare = async () => {
